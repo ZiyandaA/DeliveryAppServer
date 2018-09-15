@@ -15,7 +15,7 @@ const ordersRouter = require('./routes/orders');
 
 const app = express();
 
-mongoose.connect("mongodb://localhost/delivery");
+mongoose.connect(process.env.MONGODB_URI);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -25,21 +25,21 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", req.headers.origin);
   res.header("Access-Control-Allow-Credentials", true);
   res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();
 });
 
-app.use(session({
-  secret: "some secretr key",
-  saveUninitialized: true,
-  resave: false,
-  maxAge: .25 * 60 * 1000
-}));
+// app.use(session({
+//   secret: "some secretr key",
+//   saveUninitialized: true,
+//   resave: false,
+//   maxAge: .25 * 60 * 1000
+// }));
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
