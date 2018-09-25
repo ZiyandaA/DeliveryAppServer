@@ -299,6 +299,7 @@ router.put('/:orderId/confirm', async (req, res, next) => {
         
         transporter.sendMail(mailOptions, async (error, info) => {
             if (error) {
+                    console.log(error)
                 return res.status(500).send({
                     message: `Confirmation email could not be sent! order not confirmed`,
                     status: 'fail'
