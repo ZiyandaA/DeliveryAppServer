@@ -5,6 +5,7 @@ const convert = require('convert-units');
 
 const models = require('../models');
 const settings = require("../Settings/settings");
+const sgTransport = require('nodemailer-sendgrid-transport');
 
 const googleMapsClient = require('@google/maps').createClient({
     key: 'AIzaSyCU6xhwy9D9dSriH_20MCz3_bGzgccOiRk',
@@ -213,13 +214,18 @@ router.put('/:orderId/confirm', async (req, res, next) => {
     const { EMAIL_ADDR, EMAIL_PWD, EMAIL_FROM } = process.env;
 
     // EMAIL TRANSPORT
-    let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: EMAIL_ADDR,
-            pass: EMAIL_PWD
-        }
-    });
+    let transporter = nodemailer.createTransport(
+        sgTransport({
+            // service: 'gmail',
+            auth: {
+                // user: EMAIL_ADDR,
+                // pass: EMAIL_PWD
+                api_user: 'SENDGRID_USERNAME',
+                api_key: 'SENDGRID_PASSWORD'
+            }
+        })
+    )
+    
 
     if (!email) {
         return res.status(403).send({
