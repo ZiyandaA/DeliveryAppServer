@@ -211,17 +211,14 @@ router.get('/', async (req, res) => {
 router.put('/:orderId/confirm', async (req, res, next) => {
     const { orderId } = req.params;
     const { email } = req.body;
-    const { EMAIL_ADDR, EMAIL_PWD, EMAIL_FROM } = process.env;
+    const { EMAIL_ADDR,SENDGRID_API_KEY, EMAIL_FROM } = process.env;
 
     // EMAIL TRANSPORT
     let transporter = nodemailer.createTransport(
         sgTransport({
-            // service: 'gmail',
             auth: {
-                // user: EMAIL_ADDR,
-                // pass: EMAIL_PWD
-                api_user: 'SENDGRID_USERNAME',
-                api_key: 'SENDGRID_PASSWORD'
+                
+                api_key: SENDGRID_API_KEY
             }
         })
     )
@@ -241,13 +238,7 @@ router.put('/:orderId/confirm', async (req, res, next) => {
             throw new Error(`An order with with orderId: ${orderId} does not exists`);
         }
 
-        // if (order.confirmed) {
-        //     return res.status(409).send({
-        //         message: `Order already confirmed!`,
-        //         status: 'fail'
-        //     });
-        // }
-
+       
         const packages = {
             bins: ['One bin($30)', 'Two Bins($40)', 'Three Bins and over Truck jobs($130/hr)'],
             cases: ['One Case($35)', 'Two Cases($40)', 'Three Cases($50)'],
@@ -297,11 +288,6 @@ router.put('/:orderId/confirm', async (req, res, next) => {
             `,
         };
 
-        // Bins: ${packages.bins[order.bins.type]} – QTY: ${order.bins.quantity} – PRICE: $${pBins}
-        // Cases: ${packages.cases[order.cases.type]} – QTY: ${order.cases.quantity} - PRICE: $${pCases}
-        // Vflats: ${packages.Vflats[order.Vflats.type]} – QTY: ${order.Vflats.quantity} – PRICE: $${pVflats}
-        // Aditional: ${packages.additional[order.additional.type]} – QTY: ${order.additional.quantity} – PRICE: $${pAdditional}
-        
         
         transporter.sendMail(mailOptions, async (error, info) => {
             if (error) {

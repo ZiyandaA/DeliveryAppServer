@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 var models = require('../models');
+var hash = require('../utils/Errors/passwordHash');
 /* GET users listing. */
 router.get('/', async function(req, res, next) {
   let users = await models.User.find();
@@ -42,7 +43,8 @@ router.post("/signup", (req, res, next) => {
           message: "Sorry, this user exists already"
         })
       }
-      return models.User.create({ name, password });
+      return models.User.create({name: name, password: hash.cryptoThePassword(password)});
+      // return models.User.create({name: name, password:password});
     })
     .then(user => {
       // req.session.user = user;
@@ -57,7 +59,8 @@ router.post("/signup", (req, res, next) => {
         token
       });
     })
-    .catch(() => {
+    .catch(error => {
+      console.error(error);
       return res.status(500).send({
         status: "fail",
         message: "internal server error"
@@ -73,34 +76,10 @@ router.post('/signin', (req, res, next) => {
       message: 'Enter a name and a password'
     })
   }
-  models.User.findOne({ name })
-    .then(user => {
-      if (user && user.password == password) {
-        // req.session.user = user;
-        const token = jwt.sign({...req.body}, process.env.SECRET);
-        return res.status(200).send({
-          status: "success",
-          user: {
-            name: user.name,
-            _id: user._id
-          },
-          message: "Login succesful!",
-          token
-        });
-      }
-      else {
-        return res.status(403).send({
-          status: "fail",
-          message: 'Unauthorized, invalid username or password'
-        });
-      }
-    })
-    .catch(() => {
-      return res.status(500).send({
-        status: "fail",
-        message: "internal server error"
-      });
-    })
+  passport.authenticate('local', { successRedirect: '/',
+  failureRedirect: '/login',
+  failureFlash: true })
+
 })
 
 router.post('/logout', (req, res, next) => {

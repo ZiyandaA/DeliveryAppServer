@@ -32,8 +32,4 @@ const Order = mongoose.model('Order', orderSchema);
 
 module.exports = Order;
 
-/*
-    case - 20$
-    Bin - 30$
-    Vflat - 50$
-*/
+
