@@ -6,6 +6,7 @@ const logger = require('morgan');
 const session = require('express-session');
 const mongoose = require('mongoose');
 // require("./utils/passport-setup")
+// const passport= require ("passport");
 require('dotenv').config();
 
 const indexRouter = require('./routes/index');
@@ -41,9 +42,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({ secret: "cats" }));
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(session({ secret: "cats" }));
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 
 app.use('/', indexRouter);
