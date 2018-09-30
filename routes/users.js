@@ -54,8 +54,11 @@ router.post("/signup", async (req, res, next) => {
       let user = await models.User.findOne({name});
     
       // create token
-      let token = jwt.sign({user: name}, "our secret");
-
+      let token = jwt.sign({
+        name: user.name,
+        password: user.password
+      }, "our secret");
+      
       return res.status(200).json({
         status: "success",
         message: "Sign up success",
@@ -113,7 +116,10 @@ router.post('/signin', async (req, res, next) => {
     }
 
     // now the password is correct
-    let token = jwt.sign({user: name}, "our secret");
+    let token = jwt.sign({
+      name: user.name,
+      password: user.password
+    }, "our secret");
     return res.status(200).json({
       status: "success",
       token,
