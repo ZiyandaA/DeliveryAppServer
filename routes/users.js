@@ -57,8 +57,8 @@ router.post("/signup", async (req, res, next) => {
       let token = jwt.sign({
         name: user.name,
         password: user.password
-      }, "our secret");
-      
+      }, process.env.SECRET);
+
       return res.status(200).json({
         status: "success",
         message: "Sign up success",
@@ -119,7 +119,8 @@ router.post('/signin', async (req, res, next) => {
     let token = jwt.sign({
       name: user.name,
       password: user.password
-    }, "our secret");
+    }, process.env.SECRET);
+    
     return res.status(200).json({
       status: "success",
       token,
