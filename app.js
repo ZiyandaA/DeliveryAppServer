@@ -16,7 +16,7 @@ const ordersRouter = require('./routes/orders');
 
 const app = express();
 const cors = require('cors');
-const {CLIENT_ORIGIN} = require('./config');
+const {CLIENT_ORIGIN} = require('./routes/config');
 
 app.use(
     cors({
