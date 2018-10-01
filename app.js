@@ -15,6 +15,14 @@ const roleRouter = require('./routes/role');
 const ordersRouter = require('./routes/orders');
 
 const app = express();
+const cors = require('cors');
+const {CLIENT_ORIGIN} = require('./config');
+
+app.use(
+    cors({
+        origin: CLIENT_ORIGIN
+    })
+);
 
 mongoose.connect(process.env.MONGODB_URI);
 
