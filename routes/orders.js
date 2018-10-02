@@ -84,7 +84,10 @@ router.put('/:orderId', async (req, res) => {
         }).asPromise();
         distance = convert(distances.json.rows[0].elements[0].distance.value)
             .from('m').to('mi');
-    } catch (e) {
+    } catch (e) 
+
+    {
+       
         return res.status(500).send({
             status: 'fail',
             message: 'internal server error'
@@ -150,12 +153,13 @@ router.post('/', async (req, res, next) => {
             destinations: [customer_address],
             units: 'imperial',
         }).asPromise();
+        console.log(distances.json.rows[0].elements[0]);
         distance = convert(distances.json.rows[0].elements[0].distance.value)
             .from('m').to('mi');
     } catch (e) {
         return res.status(500).send({
             status: 'fail',
-            message: 'internal server error'
+            message: "internal server error"
         })
     }
     const price = (basePrice + (distance * settings.pricePerMile)).toFixed(2);
